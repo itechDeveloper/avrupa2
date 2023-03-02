@@ -10,10 +10,11 @@ import Logo from "../Media/logo.png";
 import IconNoImage from "../Media/icons/ic-no-img.png";
 import IconUpload from "../Media/icons/ic-upload.png";
 import LoadingScreen from "../Components/LoadingScreen";
-import Modal from "../Components/Modal";
+import Modal from "../Components/PDFModal";
 import ToastMessage from "../Components/ToastMessage";
+import Navbar from "../Components/Navbar";
 
-function PDF() {
+function PDFPage() {
   // son ödeme tarihi
   const [real_date_son_odeme, set_real_date_son_odeme] = useState(
     new Date().toLocaleDateString("en-CA")
@@ -893,6 +894,7 @@ function PDF() {
 
   return (
     <div className="container">
+      <Navbar />
       {uploading_file && (
         <LoadingScreen
           message={"PDF dosyanızı hazırlıyoruz. Lütfen bekleyin..."}
@@ -989,7 +991,7 @@ function PDF() {
             />
           </div>
           <div className="col-lg-4"></div>
-          <div className="col-lg-8">
+          <div className="col-lg-8 excel-upload">
             <label
               htmlFor="excel-upload"
               id="excel-upload-btn"
@@ -1022,4 +1024,4 @@ function PDF() {
   );
 }
 
-export default PDF;
+export default PDFPage;

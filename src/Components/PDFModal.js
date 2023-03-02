@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../Styles/GeneralStyle.css";
 
-function Modal({ options, setBlokBill }) {
+function PDFModal({ options, setBlokBill }) {
   const [title, set_title] = useState("Blok Seçiniz");
   const [bill, set_bill] = useState();
   function getBlockIndex() {
@@ -103,4 +103,4 @@ function Modal({ options, setBlokBill }) {
   );
 }
 
-export default Modal;
+export default PDFModal;

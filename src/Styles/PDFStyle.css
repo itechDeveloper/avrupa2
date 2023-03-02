@@ -1,4 +1,4 @@
-input[type="file"] {
+.excel-upload input[type="file"] {
   position: absolute;
   display: none;
 }

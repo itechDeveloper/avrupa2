@@ -1,0 +1,19 @@
+.folder-container {
+  margin-top: 65px;
+}
+
+.accordion {
+  padding-top: 10px;
+}
+
+.card-body .input-group {
+  width: 40%;
+  float: right;
+  height: auto;
+}
+
+.folder-modal-btn {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+}
