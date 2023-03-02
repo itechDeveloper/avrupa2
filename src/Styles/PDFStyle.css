@@ -1,0 +1,65 @@
+input[type="file"] {
+  position: absolute;
+  display: none;
+}
+
+.drop-files-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  z-index: 1;
+}
+
+.drop-files-container .row {
+  justify-content: center !important;
+}
+
+.drop-files-container .col-lg-4 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.drop-files-container span {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.drop-files-container .custom-date-picker {
+  position: relative;
+  border: 1px solid black;
+  border-radius: 30px;
+  padding: 10px 20px;
+  width: 100%;
+}
+
+.drop-files-container label {
+  background: rgb(230, 70, 70);
+  color: white;
+  display: flex;
+  align-items: center;
+  height: 60px;
+  border-radius: 30px;
+  padding: 0 25px;
+  transition: ease 0.5s;
+}
+
+.drop-files-container label img {
+  width: 40px;
+  margin-right: 10px;
+}
+
+.drop-files-container label:not(.chosen):hover {
+  background: rgb(250, 80, 80);
+  box-shadow: 0 0 10px 0 rgb(250, 80, 80);
+  transition: ease 0.5s;
+}
+
+.drop-files-container label.chosen {
+  background: #3ab52d;
+}
+
+.info {
+  border-right: 1px solid rgba(0, 0, 0, 0.5);
+}
