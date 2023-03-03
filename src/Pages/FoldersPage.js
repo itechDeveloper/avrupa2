@@ -1,55 +1,77 @@
 import React, { useEffect, useState } from "react";
-import FolderModal from "../Components/FolderModal";
-import Navbar from "../Components/Navbar";
 import "../Styles/FoldersStyle.css";
+import FolderModal from "../Components/FolderComponents/FolderModal";
+import LoadingScreen from "../Components/LoadingScreen";
+import Navbar from "../Components/Navbar";
+import Folder from "../Components/FolderComponents/Folder";
 
-import database from "../Helpers/Firebase.js";
-import { ref, get, child } from "firebase/database";
-import Folder from "../Components/Folder";
+import Firebase from "../Helpers/Firebase";
+import { child, get, ref } from "firebase/database";
 
 function FoldersPage() {
   const [data, set_data] = useState();
-  function getData() {
-    get(child(ref(database()), "folders/")).then((snapshot) => {
+
+  function fetchData() {
+    const database = Firebase().database;
+    get(child(ref(database), "/")).then((snapshot) => {
       if (snapshot.exists()) {
-        handleClearData(snapshot.val());
+        if (snapshot.val()) {
+          set_data(clearData(snapshot.val().data.folders));
+        }
+      } else {
+        set_data([]);
       }
     });
   }
-  useEffect(() => {
-    getData();
-  }, []);
 
-  function handleClearData(response) {
-    let index = 0;
+  function clearData(data) {
     let temp = [];
-    for (let i = 0; i < response.data.length; i++) {
-      if (response.data[i]) {
-        temp[index] = response.data[i];
+    let index = 0;
+    for (let i = 0; i < data.length; i++) {
+      if (data[i]) {
+        temp[index] = data[i];
         index++;
       }
     }
-
-    set_data(temp);
+    return temp;
   }
 
-  console.log(data);
+  // RUN HERE
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // modal
+  const [show_modal, set_show_modal] = useState(false);
 
   return (
     <div className="folder-container container">
-      <Navbar />
-      <FolderModal data={data ? data : []} set_data={set_data} />
-      <button
-        type="button"
-        className="btn btn-primary btn-lg folder-modal-btn"
-        data-bs-toggle="modal"
-        data-bs-target="#exampleModal"
-      >
-        Dosya Oluştur
-      </button>
-      {data.map((value) => (
-        <Folder folder_name={value.folder_name} />
-      ))}
+      {data ? (
+        <div>
+          <Navbar />
+          {show_modal && (
+            <FolderModal
+              data={data}
+              show_modal={set_show_modal}
+              folder_data={{ title: "Dosya Oluştur", folder_name: "" }}
+              insert={true}
+            />
+          )}
+          <button
+            type="button"
+            className="btn btn-outline-secondary folder-modal-btn"
+            onClick={() => set_show_modal(true)}
+          >
+            Klasör Oluştur
+          </button>
+
+          {data.map((value) => (
+            <Folder data={data} folder_name={value.folder_name} />
+          ))}
+        </div>
+      ) : (
+        <LoadingScreen />
+      )}
     </div>
   );
 }

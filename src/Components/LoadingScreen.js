@@ -6,7 +6,7 @@ function LoadingScreen({ message }) {
   return (
     <div className="container">
       <div className="loading-container">
-        <label>{message}</label>
+        {message && <label>{message}</label>}
         <Loader
           className="loading-spinner"
           color="red"

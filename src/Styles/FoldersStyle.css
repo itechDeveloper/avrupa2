@@ -17,3 +17,23 @@
   right: 20px;
   bottom: 20px;
 }
+
+.folder-operations {
+  width: 100%;
+  height: 0;
+}
+
+.folder-operations button {
+  float: right;
+  margin: 2px;
+}
+
+.file-operations {
+  width: 100%;
+  height: 0;
+}
+
+.file-operations button {
+  float: right;
+  margin: 2px;
+}
