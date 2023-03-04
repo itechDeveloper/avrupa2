@@ -1,5 +1,10 @@
 import Firebase from "./Firebase";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
 
 class CloudHelper {
   async uploadFile(file, file_name, folder_name) {
@@ -9,17 +14,19 @@ class CloudHelper {
       "/files/" + folder_name + "/" + file_name
     );
     await uploadBytes(storageRef, file)
-      .then(() => {
-        console.log("upload");
-        return "upload";
-      })
-      .catch((error) => {
-        console.log(error);
-        return "error";
-      });
+      .then(() => console.log("upload"))
+      .catch((error) => console.log(error));
   }
 
-  async deleteFile(folder_name, file_name) {}
+  async deleteFile(folder_name, file_name) {
+    const storageRef = ref(
+      Firebase().storage,
+      "/files/" + folder_name + "/" + file_name
+    );
+    await deleteObject(storageRef)
+      .then(() => console.log("deleted!"))
+      .catch((error) => console.log(error));
+  }
 
   async dowloadFile(folder_name, file_name) {
     const storageRef = ref(

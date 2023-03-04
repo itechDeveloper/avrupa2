@@ -5,10 +5,9 @@ import { update, ref } from "firebase/database";
 import cloudHelper from "../../Helpers/CloudHelper";
 
 function File({ data, folder_name, file_title, file_description, file_name }) {
-  function deleteFile() {
+  async function deleteFile() {
     const database = Firebase().database;
-
-    let mData = handleData();
+    let mData = await handleData();
     update(ref(database, "data/"), {
       folders: mData,
     })
@@ -21,22 +20,29 @@ function File({ data, folder_name, file_title, file_description, file_name }) {
     for (let i = 0; i < data.length; i++) {
       if (data[i].folder_name == folder_name) {
         if (data[i].files.length == 1) {
-          temp[i] = {
-            folder_name: data[i].folder_name,
-          };
+          temp[i] = { folder_name: data[i].folder_name };
+          await cloudHelper.deleteFile(folder_name, file_name);
         } else {
           for (let j = 0; j < data[i].files.length; j++) {
             if (data[i].files[j]) {
               if (data[i].files[j].file_name == file_name) {
                 await cloudHelper.deleteFile(folder_name, file_name);
-                continue;
               } else {
-                temp[i].files[index] = data[i].files[j];
-                index++;
+                if (temp[i]) {
+                  temp[i].files[index] = data[i].files[j];
+                  index++;
+                } else {
+                  temp[i] = {
+                    folder_name: folder_name,
+                    files: [data[i].files[j]],
+                  };
+                }
               }
             }
           }
         }
+      } else {
+        temp[i] = data[i];
       }
     }
     return temp;

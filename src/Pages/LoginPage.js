@@ -13,17 +13,17 @@ function LoginPage() {
   return (
     <div className="login-container">
       <form>
-        <div class="mb-3">
-          <label for="exampleInputPassword1" class="form-label">
+        <div className="mb-3">
+          <label htmlFor="exampleInputPassword1" className="form-label">
             Parola
           </label>
           <input
             type="password"
-            class="form-control"
+            className="form-control"
             onChange={(e) => set_input(e.target.value)}
           />
         </div>
-        <button type="submit" class="btn btn-primary" onClick={login}>
+        <button type="submit" className="btn btn-primary" onClick={login}>
           GİRİŞ
         </button>
       </form>
