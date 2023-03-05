@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Firebase from "../../Helpers/Firebase";
 import { update, ref } from "firebase/database";
 import cloudHelper from "../../Helpers/CloudHelper";
+import FileModal from "./FileModal";
 
 function File({ data, folder_name, file_title, file_description, file_name }) {
   async function deleteFile() {
@@ -48,15 +49,33 @@ function File({ data, folder_name, file_title, file_description, file_name }) {
     return temp;
   }
 
+  // modals
+  const [show_file_modal, set_show_file_modal] = useState(false);
+
   return (
     <div className="card margin-top-10">
+      {show_file_modal && (
+        <FileModal
+          data={data}
+          set_show={set_show_file_modal}
+          folder_name={folder_name}
+          insert={false}
+          passData={{
+            file_title: file_title,
+            file_description: file_description,
+          }}
+        />
+      )}
       <div className="card-header">{file_name}</div>
       <div className="card-body">
         <div className="file-operations">
           <button className="btn btn-outline-danger" onClick={deleteFile}>
             Bu Dosyayı Sil
           </button>
-          <button className="btn btn-outline-success">
+          <button
+            className="btn btn-outline-success"
+            onClick={() => set_show_file_modal(true)}
+          >
             Bu Dosyayı Düzenle
           </button>
         </div>
