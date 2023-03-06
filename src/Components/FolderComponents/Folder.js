@@ -5,12 +5,29 @@ import File from "./File";
 
 import Firebase from "../../Helpers/Firebase";
 import { update, ref } from "firebase/database";
+import LoadingScreen from "../LoadingScreen";
+import cloudHelper from "../../Helpers/CloudHelper";
 
 function Folder({ data, folder_name }) {
   const [show, set_show] = useState(false);
 
   // update is actually deleting here (remove data to delete & save final array)
-  function deleteFolder() {
+  async function deleteFolder() {
+    set_show_loading_page(true);
+
+    for (let i = 0; i < data.length; i++) {
+      if (folder_name == data[i].folder_name) {
+        if (data[i].files) {
+          for (let j = 0; j < data[i].files.length; j++) {
+            await cloudHelper.deleteFile(
+              folder_name,
+              data[i].files[j].file_name
+            );
+          }
+        }
+      }
+    }
+
     const database = Firebase().database;
 
     let mData = getDataRest();
@@ -19,6 +36,8 @@ function Folder({ data, folder_name }) {
     })
       .then(() => window.location.reload())
       .catch((error) => console.log(error));
+
+    set_show_loading_page(false);
   }
 
   function getDataRest() {
@@ -47,9 +66,17 @@ function Folder({ data, folder_name }) {
   // modals
   const [show_folder_modal, set_show_folder_modal] = useState(false);
   const [show_file_modal, set_show_file_modal] = useState(false);
+  const [show_loading_page, set_show_loading_page] = useState(false);
 
   return (
     <div className="accordion">
+      {show_loading_page && (
+        <LoadingScreen
+          message={
+            "Klasör içindeki dosyalar cloud'dan siliniyor. Lütfen bekleyiniz."
+          }
+        />
+      )}
       {show_folder_modal && (
         <FolderModal
           data={data}

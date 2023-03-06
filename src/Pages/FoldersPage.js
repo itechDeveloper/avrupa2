@@ -59,7 +59,7 @@ function FoldersPage() {
           )}
           <button
             type="button"
-            className="btn btn-outline-secondary folder-modal-btn"
+            className="btn btn-secondary folder-modal-btn"
             onClick={() => set_show_modal(true)}
           >
             Klasör Oluştur

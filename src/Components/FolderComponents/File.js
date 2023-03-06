@@ -4,8 +4,53 @@ import Firebase from "../../Helpers/Firebase";
 import { update, ref } from "firebase/database";
 import cloudHelper from "../../Helpers/CloudHelper";
 import FileModal from "./FileModal";
+import LoadingScreen from "../LoadingScreen";
 
 function File({ data, folder_name, file_title, file_description, file_name }) {
+  // UPDATE FILE
+  const [file, set_file] = useState();
+  const [m_file_name, set_file_name] = useState();
+  function fileHandler(event) {
+    const file = event.target.files[0];
+    if (file) {
+      set_file(file);
+      set_file_name(file.name);
+    }
+  }
+
+  async function uploadFile() {
+    let temp = data;
+    for (let i = 0; i < data.length; i++) {
+      if (folder_name == data[i].folder_name) {
+        for (let j = 0; j < data[i].files.length; j++) {
+          if (
+            data[i].files[j].file_name == file_name &&
+            data[i].files[j].file_description == file_description
+          ) {
+            set_show_loading_page(true);
+            temp[i].files[j].file_name = m_file_name;
+            await cloudHelper.deleteFile(folder_name, file_name);
+            await cloudHelper.uploadFile(file, m_file_name, folder_name);
+
+            // get database
+            const database = Firebase().database;
+
+            // update
+            update(ref(database, "data/"), {
+              folders: temp,
+            })
+              .then(() => window.location.reload())
+              .catch((error) => console.log(error));
+
+            set_show_loading_page(false);
+            return;
+          }
+        }
+      }
+    }
+  }
+
+  // DELETE
   async function deleteFile() {
     const database = Firebase().database;
     let mData = await handleData();
@@ -17,7 +62,7 @@ function File({ data, folder_name, file_title, file_description, file_name }) {
   }
   async function handleData() {
     let temp = [];
-    let index = 0;
+    let index = 1;
     for (let i = 0; i < data.length; i++) {
       if (data[i].folder_name == folder_name) {
         if (data[i].files.length == 1) {
@@ -51,9 +96,15 @@ function File({ data, folder_name, file_title, file_description, file_name }) {
 
   // modals
   const [show_file_modal, set_show_file_modal] = useState(false);
+  const [show_loading_page, set_show_loading_page] = useState(false);
 
   return (
     <div className="card margin-top-10">
+      {show_loading_page && (
+        <LoadingScreen
+          message={"Cloud dosyalarınız güncelleniyor. Lütfen bekleyiniz."}
+        />
+      )}
       {show_file_modal && (
         <FileModal
           data={data}
@@ -91,8 +142,17 @@ function File({ data, folder_name, file_title, file_description, file_name }) {
         </a>
 
         <div className="input-group">
-          <input type="file" className="form-control" aria-label="Upload" />
-          <button className="btn btn-outline-secondary" type="button">
+          <input
+            type="file"
+            className="form-control"
+            aria-label="Upload"
+            onChange={(e) => fileHandler(e)}
+          />
+          <button
+            className="btn btn-outline-secondary"
+            type="button"
+            onClick={() => uploadFile()}
+          >
             Yükle
           </button>
         </div>

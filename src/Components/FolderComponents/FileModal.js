@@ -15,8 +15,6 @@ function FileModal({ data, set_show, folder_name, passData, insert = true }) {
   );
   const [file_name, set_file_name] = useState();
 
-  const [show_loading_page, set_show_loading_page] = useState(false);
-
   function fileHandler(event) {
     const file = event.target.files[0];
     if (file) {
@@ -52,7 +50,6 @@ function FileModal({ data, set_show, folder_name, passData, insert = true }) {
 
     set_show_loading_page(false);
   }
-
   function handleInsertData() {
     let temp = data;
     for (let i = 0; i < temp.length; i++) {
@@ -104,7 +101,6 @@ function FileModal({ data, set_show, folder_name, passData, insert = true }) {
 
     set_show_loading_page(false);
   }
-
   function handleUpdateData() {
     let temp = data;
     for (let i = 0; i < temp.length; i++) {
@@ -124,11 +120,14 @@ function FileModal({ data, set_show, folder_name, passData, insert = true }) {
     return temp;
   }
 
+  // modals
+  const [show_loading_page, set_show_loading_page] = useState(false);
+
   return (
     <div className="modal show">
       {show_loading_page && (
         <LoadingScreen
-          message={"Dosyanız cloud'a yükleniyor. Lütfen bekleyiniz.."}
+          message={"Dosyanız cloud'a yükleniyor. Lütfen bekleyiniz."}
         />
       )}
       <div className="modal-dialog modal-dialog-centered">

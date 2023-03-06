@@ -13,9 +13,7 @@ class CloudHelper {
       Firebase().storage,
       "/files/" + folder_name + "/" + file_name
     );
-    await uploadBytes(storageRef, file)
-      .then(() => console.log("upload"))
-      .catch((error) => console.log(error));
+    await uploadBytes(storageRef, file).catch((error) => console.log(error));
   }
 
   async deleteFile(folder_name, file_name) {
@@ -23,9 +21,7 @@ class CloudHelper {
       Firebase().storage,
       "/files/" + folder_name + "/" + file_name
     );
-    await deleteObject(storageRef)
-      .then(() => console.log("deleted!"))
-      .catch((error) => console.log(error));
+    await deleteObject(storageRef).catch((error) => console.log(error));
   }
 
   async dowloadFile(folder_name, file_name) {
